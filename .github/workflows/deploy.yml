@@ -34,11 +34,15 @@ jobs:
         run: yarn install
 
       - name: Create Strapi app
-        run: npx create-strapi-app my-project --quickstart
+        run: npx create-strapi-app my-project --quickstart --no-run
+
+      - name: Configure Strapi app to skip login
+        run: |
+          echo 'module.exports = { auth: { secret: process.env.ADMIN_JWT_SECRET || "someSecret" } };' > my-project/config/middleware.js
 
       - name: Build Strapi app
-        run: yarn build  
+        run: cd my-project && yarn build  
 
       - name: Start Strapi server
-        run: yarn develop 
+        run: cd my-project && yarn develop 
 
